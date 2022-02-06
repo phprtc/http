@@ -48,10 +48,7 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
      */
     public function initMiddleware(MiddlewareInterface|string ...$middlewares): void
     {
-        if (!isset($this->middleware)) {
-            $this->middleware = new RequestMiddleware($this, $middlewares);
-        }
-
+        $this->middleware = new RequestMiddleware($this, $middlewares);
         $this->middleware->getCurrent()->handle($this);
     }
 

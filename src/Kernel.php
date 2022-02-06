@@ -3,12 +3,13 @@
 namespace RTC\Http;
 
 use RTC\Http\Middlewares\ControllerExecutorMiddleware;
+use RTC\Http\Middlewares\RouteDispatcherMiddleware;
 use RTC\Http\Middlewares\RouteMiddlewareExecutorMiddleware;
 
 abstract class Kernel
 {
     protected static array $httpMiddlewares = [
-        ControllerExecutorMiddleware::class,
+        RouteDispatcherMiddleware::class,
         RouteMiddlewareExecutorMiddleware::class,
     ];
 
