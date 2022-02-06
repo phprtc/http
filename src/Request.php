@@ -7,8 +7,10 @@ use RTC\Contracts\Http\MiddlewareInterface;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Contracts\Http\RequestMiddlewareInterface;
 use RTC\Contracts\Http\ResponseInterface;
-use Swoole\Http\Request as SWRequest;
-use Swoole\Http\Response as SWResponse;
+use Swoole\Http\Request as Http1Request;
+use Swoole\Http\Response as Http1Response;
+use Swoole\Http2\Request as Http2Request;
+use Swoole\Http2\Response as Http2Response;
 
 class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 {
@@ -17,9 +19,9 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 
 
     public function __construct(
-        protected SWRequest           $request,
-        protected SWResponse          $response,
-        protected DispatchResult|null $dispatchResult
+        protected Http1Request|Http2Request   $request,
+        protected Http1Response|Http2Response $response,
+        protected DispatchResult|null         $dispatchResult
     )
     {
         $this->RTCResponse = new Response($this, $this->response);
