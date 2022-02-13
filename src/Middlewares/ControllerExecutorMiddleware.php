@@ -18,7 +18,7 @@ class ControllerExecutorMiddleware extends Middleware
             try {
                 go(fn() => $handler($request));
             } catch (Throwable $exception) {
-                handleException($exception, $request);
+                $request->handleException($exception);
             }
 
             return;
@@ -34,7 +34,7 @@ class ControllerExecutorMiddleware extends Middleware
                 /**@phpstan-ignore-next-line* */
                 call_user_func_array([$initController, $method], [$request]);
             } catch (Throwable $exception) {
-                handleException($exception, $request);
+                $request->handleException($exception);
             }
         });
     }

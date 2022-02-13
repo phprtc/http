@@ -11,6 +11,7 @@ use Swoole\Http\Request as Http1Request;
 use Swoole\Http\Response as Http1Response;
 use Swoole\Http2\Request as Http2Request;
 use Swoole\Http2\Response as Http2Response;
+use Throwable;
 
 class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 {
@@ -19,9 +20,9 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 
 
     public function __construct(
-        protected Http1Request|Http2Request   $request,
-        protected Http1Response|Http2Response $response,
-        protected DispatchResultInterface|null         $dispatchResult
+        protected Http1Request|Http2Request    $request,
+        protected Http1Response|Http2Response  $response,
+        protected DispatchResultInterface|null $dispatchResult
     )
     {
         $this->RTCResponse = new Response($this, $this->response);
@@ -53,6 +54,11 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
     {
         $this->middleware = new RequestMiddleware($this, $middlewares);
         $this->middleware->next();
+    }
+
+    public function handleException(Throwable $exception): void
+    {
+        $this->getResponse()->html((string)$exception);
     }
 
     public function getResponse(): ResponseInterface

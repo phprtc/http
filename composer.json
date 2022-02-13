@@ -4,8 +4,10 @@
     "type": "library",
     "require": {
         "php": ">=8.1",
-        "phprtc/server": "dev-master as 0.0.x-dev",
-        "phprtc/http-router": "dev-master as 0.0.x-dev",
+        "phprtc/contracts": "dev-master",
+        "phprtc/utils": "dev-master",
+        "phprtc/server": "dev-master",
+        "phprtc/http-router": "dev-master",
         "twig/twig": "^3.3"
     },
     "license": "MIT",
