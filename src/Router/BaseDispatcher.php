@@ -2,14 +2,11 @@
 
 namespace RTC\Http\Router;
 
-use QuickRoute\Router\Collector;
-use QuickRoute\Router\Dispatcher;
-use QuickRoute\Router\DispatchResult;
-use RTC\Http\HttpConfig;
+use RTC\Contracts\Http\Router\DispatchResultInterface;
 
 class BaseDispatcher extends AbstractDispatcher
 {
-    public function dispatch(string $method, string $path): DispatchResult
+    public function dispatch(string $method, string $path): DispatchResultInterface
     {
         $collector = Collector::create();
 

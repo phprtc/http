@@ -2,11 +2,11 @@
 
 namespace RTC\Http;
 
-use QuickRoute\Router\DispatchResult;
 use RTC\Contracts\Http\MiddlewareInterface;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Contracts\Http\RequestMiddlewareInterface;
 use RTC\Contracts\Http\ResponseInterface;
+use RTC\Contracts\Http\Router\DispatchResultInterface;
 use Swoole\Http\Request as Http1Request;
 use Swoole\Http\Response as Http1Response;
 use Swoole\Http2\Request as Http2Request;
@@ -21,7 +21,7 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
     public function __construct(
         protected Http1Request|Http2Request   $request,
         protected Http1Response|Http2Response $response,
-        protected DispatchResult|null         $dispatchResult
+        protected DispatchResultInterface|null         $dispatchResult
     )
     {
         $this->RTCResponse = new Response($this, $this->response);
@@ -47,11 +47,12 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 
     /**
      * @param MiddlewareInterface|string ...$middlewares
+     * @throws Exceptions\MiddlewareException
      */
     public function initMiddleware(MiddlewareInterface|string ...$middlewares): void
     {
         $this->middleware = new RequestMiddleware($this, $middlewares);
-        $this->middleware->getCurrent()->handle($this);
+        $this->middleware->next();
     }
 
     public function getResponse(): ResponseInterface
@@ -64,7 +65,7 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
         return $this->middleware;
     }
 
-    public function getRouteDispatchResult(): DispatchResult
+    public function getRouteDispatchResult(): DispatchResultInterface
     {
         return $this->dispatchResult;
     }

@@ -2,7 +2,7 @@
 
 namespace RTC\Http\View;
 
-use RTC\Http\OldRequest;
+use RTC\Contracts\Http\RequestInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -24,12 +24,12 @@ class BaseView extends AbstractView
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public static function render(OldRequest $request, string $viewFile, array $data = []): string
+    public static function render(RequestInterface $request, string $viewFile, array $data = []): string
     {
         return (new static())->renderFile($request, $viewFile, $data);
     }
 
-    public function renderFile(OldRequest $request, string $viewFile, array $data = []): string
+    public function renderFile(RequestInterface $request, string $viewFile, array $data = []): string
     {
         if (!strpos($viewFile, '.twig')) {
             $viewFile .= '.twig';

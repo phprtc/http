@@ -25,15 +25,6 @@ class Response implements ResponseInterface
         );
     }
 
-    public function html(string $code, int $status = 200, array $headers = []): void
-    {
-        $this->plain(
-            $code,
-            $status,
-            array_merge(['Content-Type' => 'text/html'], $headers)
-        );
-    }
-
     public function plain(string $string, int $status = 200, array $headers = []): void
     {
         if ($this->response->isWritable()) {
@@ -47,6 +38,14 @@ class Response implements ResponseInterface
         }
     }
 
+    public function html(string $code, int $status = 200, array $headers = []): void
+    {
+        $this->plain(
+            $code,
+            $status,
+            array_merge(['Content-Type' => 'text/html'], $headers)
+        );
+    }
 
     /**
      * Reload webpage

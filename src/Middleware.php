@@ -20,6 +20,11 @@ class Middleware implements MiddlewareInterface
         }
     }
 
+    /**
+     * @param RequestInterface $request
+     * @return void
+     * @throws Exceptions\MiddlewareException
+     */
     public function handle(RequestInterface $request): void
     {
         $request->getMiddleware()->next();

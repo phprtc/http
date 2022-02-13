@@ -3,7 +3,7 @@
 
 namespace RTC\Http\View;
 
-use RTC\Http\OldRequest;
+use RTC\Contracts\Http\RequestInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -11,7 +11,7 @@ use Twig\Error\SyntaxError;
 abstract class AbstractView
 {
     /**
-     * @param OldRequest $request
+     * @param RequestInterface $request
      * @param string $viewFile
      * @param array $data
      * @return string
@@ -19,5 +19,5 @@ abstract class AbstractView
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    abstract public function renderFile(OldRequest $request, string $viewFile, array $data = []): string;
+    abstract public function renderFile(RequestInterface $request, string $viewFile, array $data = []): string;
 }
