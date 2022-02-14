@@ -25,7 +25,7 @@ class RouteMiddlewareExecutorMiddleware extends Middleware
              */
             $routeMiddleware = explode(':', $routeMiddleware);
 
-            $kernelHttpRouteMiddlewares = $request->getKernel()->getHttpRouteMiddlewares()[$routeMiddleware[0]] ?? null;
+            $kernelHttpRouteMiddlewares = $request->getKernel()->getRouteMiddlewares()[$routeMiddleware[0]] ?? null;
 
             if (null === $kernelHttpRouteMiddlewares) {
                 MiddlewareException::throw($request, "No middleware with name \"$routeMiddleware\" is defined.");

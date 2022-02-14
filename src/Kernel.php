@@ -31,7 +31,7 @@ class Kernel implements KernelInterface
     /**
      * @return array
      */
-    public function getHttpMiddlewares(): array
+    public function getMiddlewares(): array
     {
         return $this->httpMiddlewares;
     }
@@ -39,7 +39,7 @@ class Kernel implements KernelInterface
     /**
      * @return array
      */
-    public function getHttpDefaultMiddlewares(): array
+    public function getDefaultMiddlewares(): array
     {
         return $this->useDefaultHttpMiddlewares
             ? array_merge($this->httpDefaultMiddlewares, $this->httpMiddlewares)
@@ -49,7 +49,7 @@ class Kernel implements KernelInterface
     /**
      * @return array
      */
-    public function getHttpRouteMiddlewares(): array
+    public function getRouteMiddlewares(): array
     {
         return $this->routeMiddlewares;
     }
