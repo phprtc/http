@@ -7,8 +7,7 @@
         "phprtc/contracts": "dev-master",
         "phprtc/utils": "dev-master",
         "phprtc/server": "dev-master",
-        "phprtc/http-router": "dev-master",
-        "twig/twig": "^3.3"
+        "phprtc/http-router": "dev-master"
     },
     "license": "MIT",
     "autoload": {
@@ -27,10 +26,5 @@
             "type": "composer",
             "url": "https://phprtc.repo.repman.io"
         }
-    ],
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    }
+    ]
 }
