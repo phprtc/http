@@ -26,5 +26,14 @@
             "type": "composer",
             "url": "https://phprtc.repo.repman.io"
         }
-    ]
+    ],
+    "scripts": {
+        "analyse": "phpstan analyse",
+        "test": "phpunit"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.4",
+        "phpunit/phpunit": "^9.5",
+        "openswoole/ide-helper": "^4.10"
+    }
 }

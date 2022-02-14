@@ -2,6 +2,7 @@
 
 namespace RTC\Http;
 
+use RTC\Contracts\Http\KernelInterface;
 use RTC\Contracts\Http\MiddlewareInterface;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Contracts\Http\RequestMiddlewareInterface;
@@ -22,7 +23,8 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
     public function __construct(
         protected Http1Request|Http2Request    $request,
         protected Http1Response|Http2Response  $response,
-        protected DispatchResultInterface|null $dispatchResult
+        protected KernelInterface              $kernel,
+        protected DispatchResultInterface|null $dispatchResult,
     )
     {
         $this->RTCResponse = new Response($this, $this->response);
@@ -74,5 +76,10 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
     public function getRouteDispatchResult(): DispatchResultInterface
     {
         return $this->dispatchResult;
+    }
+
+    public function getKernel(): KernelInterface
+    {
+        return $this->kernel;
     }
 }

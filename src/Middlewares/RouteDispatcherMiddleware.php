@@ -5,7 +5,6 @@ namespace RTC\Http\Middlewares;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Http\Exceptions\MiddlewareException;
 use RTC\Http\Middleware;
-use RTC\Http\Request;
 
 class RouteDispatcherMiddleware extends Middleware
 {
@@ -27,26 +26,26 @@ class RouteDispatcherMiddleware extends Middleware
     }
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      * @throws MiddlewareException
      */
-    protected function generateFoundResponse(Request $request): void
+    protected function generateFoundResponse(RequestInterface $request): void
     {
         $request->getMiddleware()->next();
     }
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      */
-    protected function generateNotFoundResponse(Request $request): void
+    protected function generateNotFoundResponse(RequestInterface $request): void
     {
         $request->getResponse()->html('Page Not Found', 404);
     }
 
     /**
-     * @param Request $request
+     * @param RequestInterface $request
      */
-    protected function generateMethodNotAllowedResponse(Request $request): void
+    protected function generateMethodNotAllowedResponse(RequestInterface $request): void
     {
         $request->getResponse()->html('Method Not Allowed', 405);
     }
