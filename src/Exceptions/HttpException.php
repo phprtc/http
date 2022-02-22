@@ -14,10 +14,10 @@ class HttpException extends \RTC\Contracts\Http\HttpException
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous
-     * @return void
-     * @throws static
+     * @return never
+     * @throws HttpException
      */
-    public static function throw(RequestInterface $request, string $message, int $code = 0, ?Throwable $previous = null): void
+    public static function throw(RequestInterface $request, string $message, int $code = 0, ?Throwable $previous = null): never
     {
         throw new static($request, $message, $code, $previous);
     }
