@@ -12,9 +12,9 @@ class Kernel implements KernelInterface
 
     use InstanceCreator;
 
-    protected array $httpMiddlewares = [];
+    protected array $middlewares = [];
 
-    protected array $httpDefaultMiddlewares = [
+    protected array $defaultMiddlewares = [
         RouteDispatcherMiddleware::class,
         RouteMiddlewareExecutorMiddleware::class,
     ];
@@ -22,9 +22,9 @@ class Kernel implements KernelInterface
     /**
      * Specifies whether to use default http middlewares
      *
-     * @var bool $useDefaultHttpMiddlewares
+     * @var bool $useDefaultMiddlewares
      */
-    protected bool $useDefaultHttpMiddlewares = true;
+    protected bool $useDefaultMiddlewares = true;
 
     protected array $routeMiddlewares = [];
 
@@ -33,7 +33,7 @@ class Kernel implements KernelInterface
      */
     public function getMiddlewares(): array
     {
-        return $this->httpMiddlewares;
+        return $this->middlewares;
     }
 
     /**
@@ -41,16 +41,21 @@ class Kernel implements KernelInterface
      */
     public function getDefaultMiddlewares(): array
     {
-        return $this->useDefaultHttpMiddlewares
-            ? array_merge($this->httpDefaultMiddlewares, $this->httpMiddlewares)
-            : $this->httpMiddlewares;
+        return $this->useDefaultMiddlewares
+            ? array_merge($this->defaultMiddlewares, $this->middlewares)
+            : $this->middlewares;
     }
 
-    /**
-     * @return array
-     */
     public function getRouteMiddlewares(): array
     {
         return $this->routeMiddlewares;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function shouldUseDefaultMiddlewares(): bool
+    {
+        return $this->useDefaultMiddlewares;
     }
 }
