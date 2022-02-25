@@ -7,6 +7,7 @@ use RTC\Contracts\Http\MiddlewareInterface;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Contracts\Http\RequestMiddlewareInterface;
 use RTC\Contracts\Http\ResponseInterface;
+use RTC\Contracts\Http\Router\CollectorInterface;
 use RTC\Contracts\Http\Router\DispatchResultInterface;
 use Swoole\Http\Request as Http1Request;
 use Swoole\Http\Response as Http1Response;
@@ -61,6 +62,16 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
     public function handleException(Throwable $exception): void
     {
         $this->getResponse()->html((string)$exception);
+    }
+
+    public function hasRouteCollector(): bool
+    {
+        return isset($this->dispatchResult);
+    }
+
+    public function getRouteCollector(): CollectorInterface
+    {
+        return $this->getRouteDispatchResult()->getCollector();
     }
 
     public function getResponse(): ResponseInterface
