@@ -2,6 +2,7 @@
 
 namespace RTC\Http;
 
+use RTC\Contracts\Http\HttpHandlerInterface;
 use RTC\Contracts\Http\KernelInterface;
 use RTC\Http\Middlewares\RouteDispatcherMiddleware;
 use RTC\Http\Middlewares\RouteMiddlewareExecutorMiddleware;
@@ -9,8 +10,9 @@ use RTC\Utils\InstanceCreator;
 
 class Kernel implements KernelInterface
 {
-
     use InstanceCreator;
+
+    protected HttpHandlerInterface $handler;
 
     protected array $middlewares = [];
 
@@ -27,6 +29,19 @@ class Kernel implements KernelInterface
     protected bool $useDefaultMiddlewares = true;
 
     protected array $routeMiddlewares = [];
+
+    /**
+     * @return HttpHandlerInterface
+     */
+    public function getHandler(): HttpHandlerInterface
+    {
+        return $this->handler;
+    }
+
+    public function hasHandler(): bool
+    {
+        return isset($this->handler);
+    }
 
     /**
      * @return array
