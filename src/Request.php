@@ -51,12 +51,10 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 
     /**
      * @param MiddlewareInterface|string ...$middlewares
-     * @throws Exceptions\MiddlewareException
      */
     public function initMiddleware(MiddlewareInterface|string ...$middlewares): void
     {
         $this->middleware = new RequestMiddleware($this, $middlewares);
-        $this->middleware->next();
     }
 
     public function handleException(Throwable $exception): void

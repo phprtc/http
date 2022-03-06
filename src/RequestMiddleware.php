@@ -9,28 +9,24 @@ use RTC\Contracts\Http\MiddlewareInterface;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Contracts\Http\RequestMiddlewareInterface;
 use RTC\Http\Exceptions\MiddlewareException;
-use SplQueue;
 
 class RequestMiddleware implements RequestMiddlewareInterface
 {
-    protected SplQueue $queue;
+    protected array $middlewares = [];
+    protected int $middlewareIndex = 0;
     protected null|MiddlewareInterface $nextMiddleware;
     protected bool $hasStarted = false;
 
     public function __construct(protected RequestInterface $request, array $middlewares)
     {
-        $this->queue = new SplQueue();
-
         foreach ($middlewares as $middleware) {
-            $this->queue->push(is_object($middleware) ? $middleware : new $middleware);
+            $this->middlewares[] = is_object($middleware) ? $middleware : new $middleware;
         }
-
-        $this->queue->rewind();
     }
 
     public function push(MiddlewareInterface $middleware): void
     {
-        $this->queue->push($middleware);
+        $this->middlewares[] = $middleware;
     }
 
     /**
@@ -40,19 +36,19 @@ class RequestMiddleware implements RequestMiddlewareInterface
     public function next(): void
     {
         if (!$this->hasStarted) {
-            $this->nextMiddleware = $this->queue->current();
+            $this->nextMiddleware = $this->middlewares[$this->middlewareIndex];
         }
 
         if (!isset($this->nextMiddleware)) {
             MiddlewareException::throw($this->request, 'There is no next middleware');
         }
 
-        $next = clone $this->nextMiddleware;
+        $nextMiddleware = clone $this->nextMiddleware;
 
-        $this->queue->next();
-        $this->nextMiddleware = $this->queue->current();
+        $this->middlewareIndex += 1;
+        $this->nextMiddleware = $this->middlewares[$this->middlewareIndex] ?? null;
 
-        $next->handle($this->request);
+        $nextMiddleware->handle($this->request);
     }
 
     public function getNext(): null|MiddlewareInterface
@@ -67,11 +63,12 @@ class RequestMiddleware implements RequestMiddlewareInterface
 
     public function getCurrent(): null|MiddlewareInterface
     {
-        return $this->queue->current();
+        $index = 0 == $this->middlewareIndex ? 0 : $this->middlewareIndex - 1;
+        return $this->middlewares[$index] ?? null;
     }
 
-    public function getQueue(): SplQueue
+    public function getMiddlewares(): array
     {
-        return $this->queue;
+        return $this->middlewares;
     }
 }
