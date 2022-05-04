@@ -10,6 +10,9 @@ class DefaultHttpHandler implements HttpHandlerInterface
 {
     protected CollectorInterface $collector;
 
+    public function onReady(): void
+    {
+    }
 
     public function handle(RequestInterface $request): void
     {
