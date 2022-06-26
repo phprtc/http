@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace RTC\Http;
 
 use RTC\Contracts\Http\RequestInterface;
@@ -69,7 +71,7 @@ class Response implements ResponseInterface
             $this->response->setHeader($name, $header);
         }
 
-        $this->plain(null, 302);
+        $this->plain('', 302);
     }
 
     public function header(string $name, string $value): static
