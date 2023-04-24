@@ -2,6 +2,7 @@
 
 namespace RTC\Http\Middlewares;
 
+use RTC\Contracts\Http\HttpException;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Http\Exceptions\MiddlewareException;
 use RTC\Http\Middleware;
@@ -27,7 +28,7 @@ class RouteDispatcherMiddleware extends Middleware
 
     /**
      * @param RequestInterface $request
-     * @throws MiddlewareException
+     * @throws MiddlewareException|HttpException
      */
     protected function generateFoundResponse(RequestInterface $request): void
     {
@@ -39,7 +40,7 @@ class RouteDispatcherMiddleware extends Middleware
      */
     protected function generateNotFoundResponse(RequestInterface $request): void
     {
-        $request->getResponse()->html('Page Not Found', 404);
+        $request->getResponse()->html(sprintf('Page "%s" Not Found', $request->getUri()), 404);
     }
 
     /**
