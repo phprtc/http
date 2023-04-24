@@ -6,6 +6,7 @@ namespace RTC\Http;
 
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Contracts\Http\ResponseInterface;
+use RTC\Http\Exceptions\HtmlFileNotFoundException;
 use Swoole\Http\Response as Http1Response;
 use Swoole\Http2\Response as Http2Response;
 
@@ -83,6 +84,18 @@ class Response implements ResponseInterface
     public function sendFile(string $path, int $offset = 0, int $length = 0): void
     {
         $this->response->sendfile($path, $offset, $length);
+    }
+
+    public function serveHtmlFile(string $path): void
+    {
+        if (!file_exists($path)) {
+            throw new HtmlFileNotFoundException(
+                request: $this->request,
+                message: "Html file '$path' does not exists"
+            );
+        }
+
+        $this->html(file_get_contents($path));
     }
 
     public function trailer(string $key, string $value): void
