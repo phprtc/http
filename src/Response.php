@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 namespace RTC\Http;
 
+use HttpStatusCodes\StatusCode;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Contracts\Http\ResponseInterface;
 use RTC\Http\Exceptions\HtmlFileNotFoundException;
 use Swoole\Http\Response as Http1Response;
-use Swoole\Http2\Response as Http2Response;
 
 class Response implements ResponseInterface
 {
     public function __construct(
-        protected RequestInterface            $request,
-        protected Http1Response|Http2Response $response
+        protected RequestInterface $request,
+        protected Http1Response    $response
     )
     {
     }
 
-    public function json(object|array $data, int $status = 200, array $headers = []): void
+    public function json(object|array $data, StatusCode $status = StatusCode::OK, array $headers = []): void
     {
         $this->plain(
-            json_encode($data),
-            $status,
-            array_merge(['Content-Type' => 'application/json'], $headers)
+            string: strval(json_encode($data)),
+            status: $status,
+            headers: array_merge(['Content-Type' => 'application/json'], $headers)
         );
     }
 
-    public function plain(string $string, int $status = 200, array $headers = []): void
+    public function plain(string $string, StatusCode $status = StatusCode::OK, array $headers = []): void
     {
         if ($this->response->isWritable()) {
             foreach ($headers as $key => $value) {
@@ -36,12 +36,12 @@ class Response implements ResponseInterface
             }
 
             $this->response->setHeader('Server', 'PHP_RTC');
-            $this->response->setStatusCode($status);
+            $this->response->setStatusCode($status->value);
             $this->response->end($string);
         }
     }
 
-    public function html(string $code, int $status = 200, array $headers = []): void
+    public function html(string $code, StatusCode $status = StatusCode::OK, array $headers = []): void
     {
         $this->plain(
             $code,
@@ -72,7 +72,7 @@ class Response implements ResponseInterface
             $this->response->setHeader($name, $header);
         }
 
-        $this->plain('', 302);
+        $this->plain('', StatusCode::FOUND);
     }
 
     public function header(string $name, string $value): static
@@ -95,7 +95,7 @@ class Response implements ResponseInterface
             );
         }
 
-        $this->html(file_get_contents($path));
+        $this->html(strval(file_get_contents($path)));
     }
 
     public function trailer(string $key, string $value): void

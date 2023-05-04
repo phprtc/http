@@ -2,6 +2,7 @@
 
 namespace RTC\Http\Middlewares;
 
+use HttpStatusCodes\StatusCode;
 use RTC\Contracts\Http\HttpException;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Http\Exceptions\MiddlewareException;
@@ -10,7 +11,7 @@ use RTC\Http\Middleware;
 class RouteDispatcherMiddleware extends Middleware
 {
     /**
-     * @throws MiddlewareException
+     * @throws MiddlewareException|HttpException
      */
     public function handle(RequestInterface $request): void
     {
@@ -40,7 +41,10 @@ class RouteDispatcherMiddleware extends Middleware
      */
     protected function generateNotFoundResponse(RequestInterface $request): void
     {
-        $request->getResponse()->html(sprintf('Page "%s" Not Found', $request->getUri()), 404);
+        $request->getResponse()->html(
+            code: sprintf('Page "%s" Not Found', $request->getUri()),
+            status: StatusCode::NOT_FOUND
+        );
     }
 
     /**
@@ -48,6 +52,9 @@ class RouteDispatcherMiddleware extends Middleware
      */
     protected function generateMethodNotAllowedResponse(RequestInterface $request): void
     {
-        $request->getResponse()->html('Method Not Allowed', 405);
+        $request->getResponse()->html(
+            code: 'Method Not Allowed',
+            status: StatusCode::METHOD_NOT_ALLOWED
+        );
     }
 }

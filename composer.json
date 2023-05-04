@@ -21,12 +21,6 @@
             "email": "ahmardy@outlook.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://phprtc.repo.repman.io"
-        }
-    ],
     "scripts": {
         "analyse": "phpstan analyse",
         "test": "phpunit"

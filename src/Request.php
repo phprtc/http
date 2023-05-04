@@ -2,6 +2,7 @@
 
 namespace RTC\Http;
 
+use RTC\Contracts\Exceptions\RuntimeException;
 use RTC\Contracts\Http\KernelInterface;
 use RTC\Contracts\Http\MiddlewareInterface;
 use RTC\Contracts\Http\RequestInterface;
@@ -11,8 +12,6 @@ use RTC\Contracts\Http\Router\CollectorInterface;
 use RTC\Contracts\Http\Router\DispatchResultInterface;
 use Swoole\Http\Request as Http1Request;
 use Swoole\Http\Response as Http1Response;
-use Swoole\Http2\Request as Http2Request;
-use Swoole\Http2\Response as Http2Response;
 use Throwable;
 
 class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
@@ -22,8 +21,8 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 
 
     public function __construct(
-        protected Http1Request|Http2Request    $request,
-        protected Http1Response|Http2Response  $response,
+        protected Http1Request                 $request,
+        protected Http1Response                $response,
         protected KernelInterface              $kernel,
         protected DispatchResultInterface|null $dispatchResult,
     )
@@ -34,7 +33,7 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
             $request->getMethod(),
             $request->server['request_uri'],
             $request->header,
-            $request->getContent()
+            strval($request->getContent())
         );
     }
 
@@ -84,6 +83,10 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
 
     public function getRouteDispatchResult(): DispatchResultInterface
     {
+        if (!isset($this->dispatchResult)) {
+            throw new RuntimeException('Route has not been dispatched');
+        }
+
         return $this->dispatchResult;
     }
 
