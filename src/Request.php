@@ -10,6 +10,7 @@ use RTC\Contracts\Http\RequestMiddlewareInterface;
 use RTC\Contracts\Http\ResponseInterface;
 use RTC\Contracts\Http\Router\CollectorInterface;
 use RTC\Contracts\Http\Router\DispatchResultInterface;
+use RTC\Contracts\Server\ServerInterface;
 use Swoole\Http\Request as Http1Request;
 use Swoole\Http\Response as Http1Response;
 use Throwable;
@@ -25,6 +26,7 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
         protected Http1Response                $response,
         protected KernelInterface              $kernel,
         protected DispatchResultInterface|null $dispatchResult,
+        private readonly ServerInterface       $server,
     )
     {
         $this->RTCResponse = new Response($this, $this->response);
@@ -93,5 +95,10 @@ class Request extends \GuzzleHttp\Psr7\Request implements RequestInterface
     public function getKernel(): KernelInterface
     {
         return $this->kernel;
+    }
+
+    public function getServer(): ServerInterface
+    {
+        return $this->server;
     }
 }
