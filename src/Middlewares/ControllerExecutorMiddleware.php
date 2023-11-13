@@ -7,6 +7,7 @@ namespace RTC\Http\Middlewares;
 use RTC\Contracts\Http\RequestInterface;
 use RTC\Http\Middleware;
 use Throwable;
+use function Swoole\Coroutine\go;
 
 class ControllerExecutorMiddleware extends Middleware
 {
